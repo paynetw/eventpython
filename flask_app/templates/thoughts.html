@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Thoughts</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="container text-center">
+        <div class="row">
+            <div class=" col-sm text-dark m-2">
+                <h1>Welcome {{user.first_name}} {{user.last_name}}!</h1>
+            </div>
+            <div class="col-sm text-dark m-2">
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <form action="/users/{{user.id}}/post" method = "POST">
+                    <textarea name="content" placeholder="Post a thought here"></textarea>
+                </div>
+            <div class="col-sm-4">        
+                <button type="submit">Add Thought</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}   
+    {% if messages %}                            
+        {% for message in messages %}            
+            <p>{{message}}</p>                   
+        {% endfor %}
+    {% endif %}
+    {% endwith %}   
+
+    <div class="col-6  mx-auto my-5">
+        <table class="table table-hover ">
+            <thead class="bg-primary text-light">
+            </thead>
+            <tbody>
+                {% for post in posts  %}
+                <tr>
+                    <td><a href="/users/{{post.poster.id}}">{{post.poster.first_name}} Says:</a></td>
+                    <td>
+                        {{post.content}} 
+                        <a href="/posts/{{post.id}}/like">Like!</a>
+                        <a href="/posts/{{post.id}}/dislike">Unlike!</a>
+                        {{post.users_who_liked |length}} Likes
+                    </td>
+                    <td><a href="/posts/{{post.id}}/delete">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+</body>
+</html>
